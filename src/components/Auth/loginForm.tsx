@@ -33,7 +33,9 @@ const LoginForm = () => {
         localStorage.setItem("token", res?.data?.token);
         toast.success("Done , Please Wait");
 
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
       }
     } catch (error) {
       const errorObj = error as AxiosError;

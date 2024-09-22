@@ -31,7 +31,7 @@ const Header = () => {
                   {Isuser.userName}
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu>
+                <Dropdown.Menu className="w-100">
                   <Dropdown.Item onClick={OnLogout}>Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
