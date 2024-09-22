@@ -64,14 +64,14 @@ const RegisterForm = () => {
         ) : null
       ) : null} */}
         <header className="text-center ">
-          <h3 className=" border-start border-5 border-warning mx-auto px-3 title-header mb-5">
+          <h3 className=" border-start border-5 border-warning mx-auto px-3 title-header mb-3">
             TODO
           </h3>
         </header>
 
         <section>
           <form onSubmit={handleSubmit(onSubmit)} className="row">
-            <Col sm="6">
+            <Col sm="6" className="mt-3">
               <input
                 {...register("firstName", {
                   required: "First Name is required",
@@ -84,7 +84,7 @@ const RegisterForm = () => {
                 <InputErrors msg={errors?.firstName?.message}></InputErrors>
               ) : null}
             </Col>
-            <Col sm="6">
+            <Col sm="6" className="mt-3">
               <input
                 {...register("lastName", { required: "Last name is required" })}
                 className=" input-group-text text-start w-100 "
