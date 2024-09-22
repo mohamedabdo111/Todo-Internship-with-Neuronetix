@@ -4,6 +4,8 @@ import Task from "../../components/landingPage/task";
 import { useEffect, useState } from "react";
 import baseUrl from "../../Api/baseUrl";
 import toast, { Toaster } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const [loading, setLoadin] = useState(true);
@@ -11,17 +13,20 @@ const LandingPage = () => {
   const user = localStorage.getItem("UserData");
   const IsUsrHere = user ? JSON.parse(user) : null;
 
+  const navigate = useNavigate();
+
   const ViewAllData = () => {
     try {
       baseUrl
         .get(`/Task/User/${IsUsrHere?.userId}`, {
           headers: {
-            Authorization: `Bearer ${IsUsrHere.token}`,
+            Authorization: `Bearer ${IsUsrHere?.token}`,
           },
         })
         .then((res) => setData(res.data));
     } catch (error) {
-      console.log(error);
+      const err = error as AxiosError;
+      console.log(err);
     } finally {
       setLoadin(false);
     }
@@ -56,7 +61,7 @@ const LandingPage = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${IsUsrHere.token}`,
+            Authorization: `Bearer ${IsUsrHere?.token}`,
           },
         }
       );
@@ -67,8 +72,17 @@ const LandingPage = () => {
         toast.success("Done");
         ViewAllData();
       }
+
+      console.log(res);
     } catch (error) {
-      console.log(error);
+      const err = error as AxiosError;
+      if (err.status === 401) {
+        toast.error("Please , login first");
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      }
     }
   };
   return (
@@ -82,6 +96,7 @@ const LandingPage = () => {
             value={editTitle}
             onChange={onHanleEditTitle}
             className="input-group-text text-start w-100 my-2"
+            required
           />
           <input
             type="text"
@@ -89,6 +104,7 @@ const LandingPage = () => {
             value={editDesc}
             onChange={onHanleEditDesc}
             className="input-group-text text-start w-100 my-2"
+            required
           />
 
           <div className=" text-end">
@@ -99,11 +115,14 @@ const LandingPage = () => {
         {loading ? (
           <h2 className="text-center">loading</h2>
         ) : data && data.length >= 1 ? (
-          <Row className="  flex-column-reverse mx-2">
-            {data.map((item, idx) => {
-              return <Task user={item} key={idx} viewFun={ViewAllData} />;
-            })}
-          </Row>
+          <>
+            <h2 className=" mx-2 my-3">My Tasks</h2>
+            <Row className="  flex-column-reverse mx-2">
+              {data.map((item, idx) => {
+                return <Task user={item} key={idx} viewFun={ViewAllData} />;
+              })}
+            </Row>
+          </>
         ) : null}
 
         <Toaster></Toaster>
