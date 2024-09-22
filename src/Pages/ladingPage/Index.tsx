@@ -99,7 +99,7 @@ const LandingPage = () => {
         {loading ? (
           <h2 className="text-center">loading</h2>
         ) : data && data.length >= 1 ? (
-          <Row className="  flex-column-reverse">
+          <Row className="  flex-column-reverse mx-2">
             {data.map((item, idx) => {
               return <Task user={item} key={idx} viewFun={ViewAllData} />;
             })}
