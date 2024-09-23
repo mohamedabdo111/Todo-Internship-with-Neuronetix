@@ -31,10 +31,12 @@ const LoginForm = () => {
       if (res.status === 200) {
         localStorage.setItem("UserData", JSON.stringify(res.data));
         localStorage.setItem("token", res?.data?.token);
-        toast.success("Done , Please Wait");
+        toast.success("Done , Please Wait", {
+          duration: 1000,
+        });
 
         setTimeout(() => {
-          navigate("/");
+          window.location.href = "/";
         }, 1500);
       }
     } catch (error) {
@@ -84,7 +86,12 @@ const LoginForm = () => {
             </Col>
 
             <Col sm={12}>
-              <Button type="submit" className="w-100 bg-warning border-0 mt-3">
+              <Button
+                type="submit"
+                className={`w-100 bg-warning border-0 mt-3 ${
+                  !loading ? "disabled" : null
+                }`}
+              >
                 {!loading ? "Loading ..." : "Login"}
               </Button>
             </Col>

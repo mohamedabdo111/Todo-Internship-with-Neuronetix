@@ -8,14 +8,17 @@ import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-  const [loading, setLoadin] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const user = localStorage.getItem("UserData");
   const IsUsrHere = user ? JSON.parse(user) : null;
 
+  console.log(loading);
+
   const navigate = useNavigate();
 
   const ViewAllData = () => {
+    setLoading(true);
     try {
       baseUrl
         .get(`/Task/User/${IsUsrHere?.userId}`, {
@@ -28,16 +31,21 @@ const LandingPage = () => {
       const err = error as AxiosError;
       console.log(err);
     } finally {
-      setLoadin(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
     }
   };
 
   useEffect(() => {
-    setLoadin(true);
     ViewAllData();
   }, []);
 
   //   for modal
+
+  console.log(data);
+
+  console.log(data.length ? data : "no");
 
   const [editTitle, setEEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
@@ -113,7 +121,7 @@ const LandingPage = () => {
         </form>
         {/* display all tasks */}
         {loading ? (
-          <h2 className="text-center">loading</h2>
+          <h2 className="text-center">loading ...</h2>
         ) : data && data.length >= 1 ? (
           <>
             <h2 className=" mx-2 my-3">My Tasks</h2>
@@ -123,7 +131,9 @@ const LandingPage = () => {
               })}
             </Row>
           </>
-        ) : null}
+        ) : (
+          <h3 className="text-center">You don't have any tasks!</h3>
+        )}
 
         <Toaster></Toaster>
       </Container>
